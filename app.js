@@ -10,6 +10,17 @@ const path = require('path')
 // Import routers
 const books = require('./routes/books')
 
+// Import config
+const configDB = require('./config/database')
+
+// Connect to database with mongoose
+mongoose.connect(configDB.database)
+mongoose.connection.on('connected', () => {
+  console.log('Connected to database ' + configDB.database)
+})
+mongoose.connection.on('error', (err) => {
+  console.log('Database error : ' + err)
+})
 
 const app = express()
 
