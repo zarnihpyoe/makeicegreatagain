@@ -1,0 +1,25 @@
+{
+  "name": "micega",
+  "version": "0.1.0",
+  "description": "A web application for library management system",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zarniphyo/makeicegreatagain.git"
+  },
+  "author": "Zarni Phyo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zarniphyo/makeicegreatagain/issues"
+  },
+  "homepage": "https://github.com/zarniphyo/makeicegreatagain#readme",
+  "dependencies": {
+    "body-parser": "^1.16.1",
+    "cors": "^2.8.1",
+    "express": "^4.14.1",
+    "mongoose": "^4.8.3"
+  }
+}
