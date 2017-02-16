@@ -4,11 +4,14 @@ const express = require('express')
 // Import models
 const Book = require('../models/book')
 
+// Import parser
+const bookParser = require('../parse/bookParser')
+
 const router = express.Router()
 
 // Get all the books in the database
 router.get('/', (req, res, next) => {
-  res.send('ALL THE BOOKS')
+
 })
 
 // Get a specific book
@@ -18,21 +21,24 @@ router.get('/:id', (req, res, next) => {
 
 // Add a new book
 router.post('/', (req, res, next) => {
-  let newBook = new Book({
-    title: req.body.title,
-    subtitle: req.body.subtitle,
-    authors: req.body.authors,
-    publisher: req.body.publisher,
-    publishedDate: req.body.publishedDate,
-    description: req.body.description,
-    isbn_13: req.body.isbn_13,
-    pageCount: req.body.pageCount,
-    catalogedDate: new Date(),
-  })
+  const url = 'https://www.googleapis.com/books/v1/volumes/' + req.body.bid + '?fields=id,volumeInfo(title,subtitle,authors,publisher,publishedDate,description,industryIdentifiers,pageCount,categories,imageLinks(smallThumbnail,thumbnail))'
+  bookParser.getJSON(url).then((book) => {
+    let newBook = new Book({
+      title: book.volumeInfo.title,
+      subtitle: book.volumeInfo.subtitle,
+      authors: book.volumeInfo.authors,
+      publisher: book.volumeInfo.publisher,
+      publishedDate: book.volumeInfo.publishedDate,
+      description: book.volumeInfo.description,
+      isbn_13: book.volumeInfo.industryIdentifiers[1].identifier,
+      pageCount: book.volumeInfo.pageCount,
+      catalogedDate: new Date(),
+    })
 
-  Book.addBook(newBook, (err, user) => {
-    if(err) res.json({success: false, msg: 'Failed to add the book.'})
-    else res.json({success: true, msg: 'Book added to the database.'})
+    Book.addBook(newBook, (err, user) => {
+      if(err) res.json({success: false, msg: 'Failed to add the book.'})
+      else res.json({success: true, msg: 'Book added to the database.'})
+    })
   })
 })
 
